@@ -1,12 +1,22 @@
 <script>
+  import { getArtist } from "./services/artistService.svelte";
+  let searchString = "";
+
+  const onKeyPress = (e) => {
+    if (e.charCode === 13) {
+      getArtist(searchString);
+    }
+  };
 </script>
 
 <div class="container">
   <div class="inputContainer">
     <img src="images/loupe.svg" alt />
     <input
+      bind:value={searchString}
       type="text"
       placeholder="Search for artists, concerts, venues and festivals"
+      on:keypress={onKeyPress}
     />
   </div>
 </div>

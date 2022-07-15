@@ -1,18 +1,13 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
-  import { ArtistStore } from "../stores";
+
+  import { getArtist } from "./components/services/artistService.svelte";
   import Header from "./components/Header.svelte";
   import Hero from "./components/Hero.svelte";
 
   onMount(async () => {
-    fetch("https://rest.bandsintown.com/artists/colab?app_id=test")
-      .then((response) => response.json())
-      .then((data) => {
-        ArtistStore.update(() => {
-          return data;
-        });
-        console.log("data", data);
-      });
+    // default artist
+    await getArtist("Colab");
   });
 </script>
 

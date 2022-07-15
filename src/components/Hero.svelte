@@ -1,23 +1,45 @@
-<script>
-  import { ArtistStore } from "../../stores";
+<script lang="ts">
+  import { ArtistStore } from "../artistStore";
+  import { LoadingStore } from "../LoadingStore";
+
+  import Button from "./ui/Button.svelte";
+  import type { Artist } from "./services/types/artistModel";
+
+  $: artist = $ArtistStore as Artist;
+  $: loading = $LoadingStore as boolean;
+  // $: {
+  //   console.log("artist", artist);
+  // }
 </script>
 
-<div class="container">
-  <div
-    class="coverImage"
-    style="background-image: url({$ArtistStore?.image_url});"
-  />
-  <div class="avatar">
-    <img src={$ArtistStore?.thumb_url} alt={$ArtistStore?.name} />
-  </div>
+{#if loading}
+  <h2>Loading ...</h2>
+{:else if !artist}
+  <h1>Artist not found</h1>
+{:else}
+  <div class="container">
+    <div
+      class="coverImage"
+      style="background-image: url({artist?.image_url});"
+    />
+    <div class="avatar">
+      <img src={artist?.thumb_url} alt={artist?.name} />
+    </div>
 
-  <div class="title">
-    <h1>{$ArtistStore?.name}</h1>
-    <h3>
-      {`${$ArtistStore?.tracker_count} Followers . ${$ArtistStore?.upcoming_event_count} Upcoming Concerts`}
-    </h3>
+    <div class="title">
+      <h1>{artist?.name}</h1>
+      <h3>
+        {`${Number(artist?.tracker_count).toLocaleString()} Followers . ${
+          artist?.upcoming_event_count
+        } Upcoming Concerts`}
+      </h3>
+    </div>
+
+    <div class="follow">
+      <Button type="button">Follow</Button>
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .container {
@@ -54,5 +76,12 @@
     left: 40%;
     transform: translate(-50%, -50%);
     color: #fff;
+  }
+
+  .follow {
+    position: absolute;
+    top: 50%;
+    left: 85%;
+    transform: translate(-50%, -50%);
   }
 </style>
